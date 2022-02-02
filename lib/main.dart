@@ -1,7 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(Quizzler());
 
@@ -32,15 +31,6 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
-
-  //creating a question object to hold our questions and answers
-  /*List<Question> questionBank = [
-    Question(a: 'You can lead a cow down stairs but not up stairs.', b: false),
-    Question(
-        a: 'Approximately one quarter of human bones are in the feet.',
-        b: true),
-    Question(a: 'A slug\'s blood is green.', b: true)
-  ];*/
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +71,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                checkAnswer(true);
+                checkAnswer(true, context);
               },
             ),
           ),
@@ -101,7 +91,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                checkAnswer(false);
+                checkAnswer(false, context);
               },
             ),
           ),
@@ -113,7 +103,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  void checkAnswer(bool userPickedAnswer) {
+  void checkAnswer(bool userPickedAnswer, context) {
     bool correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
       if (userPickedAnswer == correctAnswer) {
@@ -128,15 +118,19 @@ class _QuizPageState extends State<QuizPage> {
         ));
       }
       quizBrain.nextQuestion();
+
       if (quizBrain.getQuestionNumber() == 0) {
+        onFinished(context);
         scoreKeeper.clear();
       }
     });
   }
 }
 
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
+void onFinished(context) {
+  Alert(
+          context: context,
+          title: "Finished!",
+          desc: "You have answered all questions click okay to restart")
+      .show();
+}
