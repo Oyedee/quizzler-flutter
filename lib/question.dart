@@ -2,8 +2,7 @@ class Question {
   String questionText;
   bool questionAnswer;
 
-  Question(String a, bool b) {
-    questionText = a;
-    questionAnswer = b;
-  }
+  //optimizing our question constructor to make use of a more
+  //simpler dart constructor using the this keyword.
+  Question(this.questionText, this.questionAnswer);
 }
